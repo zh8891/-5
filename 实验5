@@ -1,0 +1,140 @@
+#include"stdio.h"
+#include"string.h"
+#include"stdlib.h"
+struct student
+{
+	int ID;
+	int Age;
+	char Name[100];
+	int Height;
+	struct student*next; 
+}; 
+struct student*head=NULL;
+struct student*tall=NULL;
+void printstudent(struct student*cur)
+{
+	printf("学号:%d	年龄:%d	姓名:%s	Height:%d\n",cur->ID,cur->Age,cur->Name,cur->Height);
+}
+void list(struct student*head)
+{
+	while(head!=NULL)
+	{
+		printstudent(head);
+		head=head->next;
+	}
+}
+void add()
+{
+	struct student*node=(struct student*)malloc(sizeof(struct student));
+	printf("请输入学号:");
+	scanf("%d",&node->ID);
+	printf("请输入年龄:");
+	scanf("%d",&node->Age);
+	printf("请输入姓名:");
+	scanf("%s",node->Name);
+	printf("请输入身高:");
+	scanf("%d",&node->Height);
+	node->next=NULL;
+	if(head==NULL)
+	{
+		head=node;
+		tall=node;
+	}
+	else
+	{
+		tall->next=node;
+		tall=node;
+	}
+	printf("添加成功\n");
+}
+void find()
+{
+	printf("请输入想要查询的学生学号:");
+	int id;
+	scanf("%d",&id);
+	struct student*cur=head;
+	int n=0;
+	while(cur!=NULL)
+	{
+		if(cur->ID==id)
+		{
+			printstudent(cur);
+			n=1;
+			break;
+		}
+		else
+		{
+			cur=cur->next;
+		}
+	}
+	if(n==0)
+	printf("没有这个学生\n");
+}
+void printfallstudent()
+{
+	if(head==NULL)
+	{
+		printf("没有该学生\n");
+	}
+	else
+	list(head);
+}
+void deletestudent()
+{
+	printf("请输入想要删除的学生学号:");
+	int id;
+	scanf("%d",&id);
+	struct student*cur=head;
+	if(cur->ID==id)
+	{
+		head=head->next;
+		free(cur);
+		cur=NULL;
+		return;
+	}
+	struct student*pre=cur;//pre=s1
+	cur=cur->next;
+	while(cur!=NULL)
+	{
+		if(cur->ID==id)
+		{
+			struct student*next=cur->next;
+			pre->next=next;
+			free(cur);
+			cur=NULL;
+			printf("已删除\n");
+			return;
+		}
+		else
+		{
+			pre=cur;
+			cur=cur->next;
+		}
+	}
+	printf("该学生不存在，无法删除\n");
+	
+}
+int main()
+{
+	printf("欢迎使用学生管理系统:\n");
+	printf("按1添加学生\n");
+	printf("按2查询学生\n");
+	printf("按3打印所有学生\n");
+	printf("按4删除学生\n");
+	printf("按5退出系统\n"); 
+	
+	while(1)
+	{
+		char c;
+		scanf("%c",&c);
+		switch(c)
+		{
+			case '1':add();break;
+			case '2':find();break;
+			case '3':printfallstudent();break;
+			case '4':deletestudent();break;
+			case '5':exit(0);
+		}
+	}	
+	return 0;
+}
